@@ -1,5 +1,5 @@
 - name: Install Kubernetes (MicroK8s)
-  hosts: rpies
+  hosts: raspis
   tasks:
     - name: Install snap
       become: yes
@@ -11,12 +11,18 @@
 
     - name: Install MicroK8s
       become: yes
-      shell: snap install microk8s --classic
+      shell: snap install microk8s --classic --channel=1.25
 
-    - name: Join gruop
+    - name: Join group
       become: yes
-      shell: /usr/sbin/usermod -a -G microk8s pi
+      shell: /usr/sbin/usermod -a -G microk8s `whoami`
+
+    - name: Setup kubectl
+      become: yes
+      shell: |
+        mkdir ~/.kube
+        microk8s config > ~/.kube/config
 
     - name: Set owner
       become: yes
-      shell: /usr/bin/chown -f -R pi ~/.kube
+      shell: /usr/bin/chown -f -R `whoami` ~/.kube
