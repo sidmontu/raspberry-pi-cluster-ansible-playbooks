@@ -30,8 +30,11 @@ master=rpi01.local:25000
 Run a playbook as follows:
 
 ```bash
-ansible-playbook some-playbook.yml --ask-pass
+ansible-playbook some-playbook.yml -kK
 ```
+
+The `-kK` flag asks for connection password (`-k` or `--ask-pass`) and
+privilege escalation password (i.e. `sudo`; `-K` or `--ask-become-pass`).
 
 ## Configuring
 

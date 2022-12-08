@@ -1,5 +1,5 @@
 - name: Prepare for Kubernetes
-  hosts: rpies
+  hosts: raspis
   tasks:
     - name: Enable cgroups
       become: yes
@@ -9,11 +9,22 @@
       become: yes
       shell: sh -c "echo '$(hostname).local' > /etc/hostname"
 
-    - shell: export LC_ALL=C.UTF-8
-    - shell: export LANG=C.UTF-8
-    - shell: echo "LC_ALL=en_US.UTF-8" | sudo tee -a /etc/environment
-    - shell: echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
-    - shell: echo "LANG=en_US.UTF-8" | sudo tee -a /etc/locale.conf
+    - name: Set locale step one
+      shell: |
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+
+    - name: Set locale step two
+      become: yes
+      shell: echo "LC_ALL=en_US.UTF-8" | sudo tee -a /etc/environment
+
+    - name: Set locale step three
+      become: yes
+      shell: echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
+
+    - name: Set locale step four
+      become: yes
+      shell: echo "LANG=en_US.UTF-8" | sudo tee -a /etc/locale.conf
 
     - name: Configure locale
       become: yes
